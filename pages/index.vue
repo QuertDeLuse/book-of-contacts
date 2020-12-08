@@ -5,8 +5,7 @@
 export default {
   async asyncData({ store, params, redirect }) {  
       try { 
-        // return await redirect('/contacts/' + store.contacts[0].id);
-        return await redirect('/contacts/');
+        return await redirect('/contacts');
       } catch(e) {
         // error(e);
       }

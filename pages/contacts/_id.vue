@@ -10,6 +10,8 @@ export default {
     try {
       // console.log(params.id)
     } catch {}
+
+    return {}
   },
 
   computed: {
@@ -23,6 +25,7 @@ export default {
 
 <style lang="scss" module>
 .Contact {
+  width: 60%;
   padding: 20px;
 }
 </style>

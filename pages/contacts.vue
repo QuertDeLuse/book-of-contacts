@@ -14,6 +14,7 @@
           </li>
         </ul>
       </nav>
+      <AddContactBtn @click="addNewContact"/>
     </aside>
     <nuxt-child></nuxt-child>
   </div>
@@ -21,8 +22,10 @@
 
 <script>
 import ContactLink from "@/components/ContactLink";
+import AddContactBtn from "@/components/AddContactBtn"
 
-export default {
+export default { 
+
   computed: {
     contacts() {
       return this.$store.state.contacts;
@@ -32,6 +35,9 @@ export default {
   methods: {
     removeContact(id) {
       this.$store.dispatch("removeContact", id);
+    },
+    addNewContact() {
+      this.$store.dispatch("addNewContact");
     },
   },
 };
@@ -43,11 +49,11 @@ export default {
 }
 
 .aside {
-  width: 30%;
+  width: 40%;
   padding: 20px;
 }
 
 .title {
-    margin: 0;
+  margin: 0;
 }
 </style>

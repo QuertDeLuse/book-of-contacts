@@ -10,13 +10,26 @@ export const getters = {
 };
 
 export const actions = {
-    addNewContact({ commit, state }, contactObj) {
+    
+    addNewContact({ commit, state }) {
         let newContacts = [...state.contacts];
+
+        let id;       
+        while(true) {
+            id = Math.round( 100 + Math.random() * (999 - 100) );
+
+           if( state.contacts.find(item => item.id == id) ) {} else {
+               break;
+           }
+        } 
+
+        let contactObj = { id: id, name: `New user with id = ${id}` };
 
         newContacts.push(contactObj);
 
         commit('SET_CONTACTS', newContacts);
     },
+
     removeContact({ commit, state }, id) {
         let newContacts = [...state.contacts];
 
