@@ -3,7 +3,7 @@ export const state = () => ({
     { id: 2, name: 'Bob', email: 'email@mail.com', phoneNumber: '123123123' },
     { id: 3, name: 'Bob', email: 'email@mail.com', phoneNumber: '123123123' },],
 
-    lastUserAction: { type: 'adding', usingData: {} }
+    stepBackContacts: [],
 });
 
 export const getters = {
@@ -15,35 +15,51 @@ export const actions = {
 
     //contacts functions
     addContact({ commit, state }) {
-        let newContacts = [...state.contacts];
 
-        let id;
-        while (true) {
-            id = Math.round(100 + Math.random() * (999 - 100));
+        try {
+            let newContacts = [...state.contacts];
 
-            if (state.contacts.find(item => item.id == id)) { } else {
-                break;
+            let id;
+            while (true) {
+                id = Math.round(100 + Math.random() * (999 - 100));
+
+                if (state.contacts.find(item => item.id == id)) { } else {
+                    break;
+                }
             }
+
+            let contactObj = { id: id, name: `New user with id = ${id}`, phoneNumber: 0 };
+
+            newContacts.push(contactObj);
+
+            commit('SET_CONTACTS', newContacts);
+        } catch {
+
         }
 
-        let contactObj = { id: id, name: `New user with id = ${id}`, phoneNumber: 0 };
 
-        newContacts.push(contactObj);
-
-        commit('SET_CONTACTS', newContacts);
     },
 
     removeContact({ commit, state }, id) {
-        let newContacts = [...state.contacts];
+        try {
+            let newContacts = [...state.contacts];
 
-        newContacts = newContacts.filter(item => item.id != id);
+            newContacts = newContacts.filter(item => item.id != id);
 
-        commit('SET_CONTACTS', newContacts);
+            commit('SET_CONTACTS', newContacts);
+        } catch {
+
+        }
     },
 
     //contacts property functions
     removeProperty({ commit, state }, propObj) {
-        try {
+        try {            
+            let newStepBackContacts = JSON.parse(JSON.stringify(state.contacts))
+            commit('SET_STEP_BACK_CONTACTS', newStepBackContacts);
+
+            console.log('newStepBackContacts', newStepBackContacts);
+
             let editingContact = state.contacts.find(item => item.id == propObj.id);
             let newContacts = state.contacts.filter(item => item.id != propObj.id);
 
@@ -60,8 +76,8 @@ export const actions = {
     addProperty({ commit, state }, propObj) {
 
         try {
-            propObj.name = 'q1';
-            propObj.value = 'q2';
+            let newStepBackContacts = JSON.parse(JSON.stringify(state.contacts))
+            commit('SET_STEP_BACK_CONTACTS', newStepBackContacts);
 
             let editingContact = state.contacts.find(item => item.id == propObj.id);
             let newContacts = state.contacts.filter(item => item.id != propObj.id);
@@ -74,11 +90,23 @@ export const actions = {
         } catch {
             console.log('Deleting property error');
         }
-    }
+    },
+
+    returnStepBack({ commit, state }) {  
+        try {
+            let newContacts = [...state.stepBackContacts];
+            commit('SET_CONTACTS', newContacts);
+        } catch {
+
+        }   
+    },
 };
 
 export const mutations = {
     SET_CONTACTS(state, newContacts) {
         state.contacts = newContacts;
+    },
+    SET_STEP_BACK_CONTACTS(state, newValue) {
+        state.stepBackContacts = newValue;
     },
 };
