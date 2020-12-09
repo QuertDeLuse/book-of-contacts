@@ -2,13 +2,16 @@
   <div :class="$style.ContactLink">
     <nuxt-link :to="`contacts/${to}`" class="Contact" :class="$style.link">
       <h3 :class="$style.name">{{ name }}</h3>
-      <p :class="$style.email">{{ email }}</p>
+      <p :class="$style.phoneNumber">{{ phoneNumber }}</p>
     </nuxt-link>
-    <button @click.prevent="click">Remove</button>
+    <Button @click="click" :type="'delete'" :name="'remove'" />
+    <!-- <button @click.prevent="click">Remove</button> -->
   </div>
 </template>
 
 <script>
+import Button from "@/components/Button";
+
 export default {
   props: {
     to: {
@@ -19,9 +22,9 @@ export default {
       type: String,
       default: "contact name not found",
     },
-    email: {
+    phoneNumber: {
       type: String,
-      default: "contact email not found",
+      default: "contact phone number not found",
     },
   },
 
@@ -33,28 +36,32 @@ export default {
 };
 </script>
 
-
 <style lang="scss" module>
 .ContactLink {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  padding: 4px;
+
+  &:hover {
+    .link {
+      text-decoration: underline;
+    }
+    background-color: rgba(gray, 0.1);
+  }
 }
 
 .link {
   text-decoration: none;
   color: #000;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
 .name {
-  margin-bottom: 0px;
+  margin: 0px;
 }
 
-.email {
+.phoneNumber {
   margin: 0px;
 }
 </style>

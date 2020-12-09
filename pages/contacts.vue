@@ -1,20 +1,20 @@
 <template>
   <div class="container" :class="$style.container">
     <aside :class="$style.aside">
+      <h1 :class="$style.title">Contacts</h1>
       <nav>
-        <h1 :class="$style.title">Contacts</h1>
         <ul>
           <li v-for="contact in contacts" :key="contact.id">
             <ContactLink
               :to="contact.id"
               :name="contact.name"
-              :email="contact.email"
+              :phoneNumber="contact.phoneNumber"
               @click="removeContact(contact.id)"
             />
           </li>
         </ul>
       </nav>
-      <AddContactBtn @click="addNewContact"/>
+      <Button :type="'add'" :name="'Add contact'" @click="addContact" />
     </aside>
     <nuxt-child></nuxt-child>
   </div>
@@ -22,10 +22,9 @@
 
 <script>
 import ContactLink from "@/components/ContactLink";
-import AddContactBtn from "@/components/AddContactBtn"
+import Button from "@/components/Button";
 
-export default { 
-
+export default {
   computed: {
     contacts() {
       return this.$store.state.contacts;
@@ -36,8 +35,8 @@ export default {
     removeContact(id) {
       this.$store.dispatch("removeContact", id);
     },
-    addNewContact() {
-      this.$store.dispatch("addNewContact");
+    addContact() {
+      this.$store.dispatch("addContact");
     },
   },
 };
