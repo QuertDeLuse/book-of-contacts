@@ -28,7 +28,7 @@ export const actions = {
                 }
             }
 
-            let contactObj = { id: id, name: `New user with id = ${id}`, phoneNumber: 0 };
+            let contactObj = { id: id, name: `New user with id = ${id}`, phoneNumber: '0' };
 
             newContacts.push(contactObj);
 
@@ -57,9 +57,7 @@ export const actions = {
         try {            
             let newStepBackContacts = JSON.parse(JSON.stringify(state.contacts))
             commit('SET_STEP_BACK_CONTACTS', newStepBackContacts);
-
-            console.log('newStepBackContacts', newStepBackContacts);
-
+            
             let editingContact = state.contacts.find(item => item.id == propObj.id);
             let newContacts = state.contacts.filter(item => item.id != propObj.id);
 

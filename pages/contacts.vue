@@ -15,6 +15,9 @@
         </ul>
       </nav>
       <Button :type="'add'" :name="'Add contact'" @click="addContact" />
+      <Modal @submit="deleteSubmit" @cancel="deleteCancel" v-if="confirmModalShow">
+        <h3>Are you sure?</h3>
+      </Modal>
     </aside>
     <nuxt-child></nuxt-child>
   </div>
@@ -23,8 +26,16 @@
 <script>
 import ContactLink from "@/components/ContactLink";
 import Button from "@/components/Button";
+import Modal from "@/components/Modal";
 
 export default {
+  data() {
+    return {
+      confirmModalShow: false,
+      selectedContactId: -1,
+    }
+  },
+
   computed: {
     contacts() {
       return this.$store.state.contacts;
@@ -32,8 +43,16 @@ export default {
   },
 
   methods: {
+    deleteSubmit() {
+      this.$store.dispatch("removeContact", this.selectedContactId);
+       this.confirmModalShow = !this.confirmModalShow;
+    },
+    deleteCancel() {
+      this.confirmModalShow = !this.confirmModalShow;
+    },
     removeContact(id) {
-      this.$store.dispatch("removeContact", id);
+      this.selectedContactId = id;
+      this.confirmModalShow = !this.confirmModalShow;
     },
     addContact() {
       this.$store.dispatch("addContact");
