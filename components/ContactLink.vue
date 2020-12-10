@@ -55,6 +55,8 @@ export default {
 .link {
   text-decoration: none;
   color: #000;
+
+  width: 100%;
 }
 
 .name {

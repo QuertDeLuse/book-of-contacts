@@ -6,9 +6,8 @@
         v-for="(value, name) in contactData"
         :key="value.id"
         :class="$style.property"
-        @click.prevent="editProperty(name, value)"
       >
-        {{ name + " : " + value }}
+        <a href="#" @click.prevent="editProperty(name, value)"> {{ name + " : " + value }} </a>
         <Button :type="'delete'" :name="'remove'" @click="removeProperty(name)" />
       </li>
     </ul>
@@ -67,9 +66,12 @@ export default {
       this.editMode = !this.editMode;
       this.confirmEditModalShow = !this.confirmEditModalShow;
       this.addPropModalShow = !this.addPropModalShow;
+      
+      this.propertyName = '';
+      this.propertyValue = '';
     },
     editCancel() {      
-      this.confirmEditModalShow = !this.confirmEditModalShow;
+      this.confirmEditModalShow = !this.confirmEditModalShow;      
     },
 
     deleteSubmit() {
@@ -98,7 +100,9 @@ export default {
       if (this.editMode) {
         this.confirmEditModalShow = !this.confirmEditModalShow;
       } else {
-        this.addPropModalShow = !this.addPropModalShow;
+        this.addPropModalShow = !this.addPropModalShow;        
+        this.propertyName = '';
+        this.propertyValue = '';
       }
 
     },
@@ -106,7 +110,8 @@ export default {
     addProperty() {
       this.addPropModalShow = !this.addPropModalShow;
     },
-    removeProperty(name) {
+    removeProperty(name) {  
+
       if (name == "id") {
         alert("It is impossible to delete id");
       } else {
@@ -115,13 +120,17 @@ export default {
       }
     },
 
-    editProperty(name, value) {
-      this.editMode = !this.editMode;
+    editProperty(name, value) {         
+      if (name == "id") {
+        alert("It is impossible to edit id");
+      } else {
+        this.editMode = !this.editMode;
 
-      this.addPropModalShow = !this.addPropModalShow;        
+        this.addPropModalShow = !this.addPropModalShow;        
 
-      this.propertyName = name;
-      this.propertyValue = value;
+        this.propertyName = name;
+        this.propertyValue = value;
+      }
     },
 
     stepBack() {
@@ -168,6 +177,12 @@ export default {
 
   &:hover {
     background-color: rgba(gray, 0.1);
+  }
+
+  a {
+    text-decoration: none;
+    color: #000;
+    width: 100%;
   }
 }
 
