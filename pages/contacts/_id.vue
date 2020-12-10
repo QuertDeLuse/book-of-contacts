@@ -3,18 +3,19 @@
     <h2 :class="$style.title">Contact Information</h2>
     <ul :class="$style.propertyList">
       <li
-        v-for="(property, name) in contactData"
-        :key="property.id"
+        v-for="(value, name) in contactData"
+        :key="value.id"
         :class="$style.property"
+        @click.prevent="editProperty(name, value)"
       >
-        {{ name + " : " + property }}
+        {{ name + " : " + value }}
         <Button :type="'delete'" :name="'remove'" @click="removeProperty(name)" />
       </li>
     </ul>
 
     <div :class="$style.btnGroup">
-      <Button :type="'add'" :name="'Add contact property'" @click="addProperty()" />
-      <Button :type="'add'" :name="'<- Step Back'" @click="stepBack()" />
+      <Button :type="'add'" :name="'Add contact property'" @click="addProperty()"  v-if="contactData" />
+      <Button :type="'add'" :name="'<- Step Back'" @click="stepBack()" v-if="contactData" />
     </div>
 
     <Modal @submit="addPropSubmit" @cancel="addPropCancel" v-if="addPropModalShow">
@@ -25,7 +26,7 @@
         placeholder="property name"
         required
       />
-      /
+      :
       <input
         v-model="propertyValue"
         type="value"
@@ -36,6 +37,9 @@
     </Modal>
 
     <Modal @submit="deleteSubmit" @cancel="deleteCancel" v-if="confirmModalShow">
+      <h3>Are you sure?</h3>
+    </Modal>
+    <Modal @submit="editSubmit" @cancel="editCancel" v-if="confirmEditModalShow">
       <h3>Are you sure?</h3>
     </Modal>
   </div>
@@ -50,13 +54,24 @@ export default {
     return {
       addPropModalShow: false,
       confirmModalShow: false,
+      confirmEditModalShow: false,
       propertyName: "",
       propertyValue: "",
       propertyNameForDeletion: "",
+      editMode: false,
     };
   },
 
   methods: {
+    editSubmit() {
+      this.editMode = !this.editMode;
+      this.confirmEditModalShow = !this.confirmEditModalShow;
+      this.addPropModalShow = !this.addPropModalShow;
+    },
+    editCancel() {      
+      this.confirmEditModalShow = !this.confirmEditModalShow;
+    },
+
     deleteSubmit() {
       this.$store.dispatch("removeProperty", {
         id: this.contactData.id,
@@ -80,7 +95,12 @@ export default {
       this.propertyValue = "";
     },
     addPropCancel() {
-      this.addPropModalShow = !this.addPropModalShow;
+      if (this.editMode) {
+        this.confirmEditModalShow = !this.confirmEditModalShow;
+      } else {
+        this.addPropModalShow = !this.addPropModalShow;
+      }
+
     },
 
     addProperty() {
@@ -93,6 +113,15 @@ export default {
         this.propertyNameForDeletion = name;
         this.confirmModalShow = !this.confirmModalShow;
       }
+    },
+
+    editProperty(name, value) {
+      this.editMode = !this.editMode;
+
+      this.addPropModalShow = !this.addPropModalShow;        
+
+      this.propertyName = name;
+      this.propertyValue = value;
     },
 
     stepBack() {
